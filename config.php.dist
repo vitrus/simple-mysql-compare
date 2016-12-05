@@ -1,0 +1,33 @@
+<?php
+
+/**
+ * In config.php you can configure the two databases you want to compare
+ *
+ * The $databases var should be an array containing two arrays with the
+ * attributes "name" (used just for readability) and "config" with the
+ * actual credentials of the database.
+ *
+ * An example of the configs should be present in this file and if not
+ * refer to config.php.dist
+ */
+
+$databases = [
+//    [
+//        'name' => 'First database',
+//        'config' => [
+//            'host' => 'localhost',
+//            'user' => 'db-user-1',
+//            'password' => 'db-password-1',
+//            'name' => 'db-name-1',
+//        ],
+//    ],
+//    [
+//        'name' => 'Second database',
+//        'config' => [
+//            'host' => 'localhost',
+//            'user' => 'db-user-2',
+//            'password' => 'db-password-2',
+//            'name' => 'db-name-2',
+//        ],
+//    ],
+];

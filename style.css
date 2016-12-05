@@ -1,0 +1,20 @@
+.table tr.row-missing-left > td,
+.table tr.row-missing-left > th {
+    background-color: #f0d8d8; /* red-ish*/
+}
+.table tr.row-missing-right > td,
+.table tr.row-missing-right > th {
+    background-color: #d8e9f0; /* blue-ish */
+}
+.table tr.row-almost > td,
+.table tr.row-almost > th {
+    background-color: #f0f0d8; /* yellow-ish */
+}
+.table tr.row-different > td,
+.table tr.row-different > th {
+    background-color: #f0e8d8; /* orange-ish */
+}
+.table tr.row-same > td,
+.table tr.row-same > th {
+    background-color: #dff0d8; /* green-ish */
+}
