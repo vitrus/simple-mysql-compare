@@ -10,6 +10,11 @@ It shows an overview of all the tables in the databases, whether they are presen
 2. Create a `config.php` (use config.php.dist as template)
 3. Point your browser towards the `index.php`
 
+### Screenshots
+
+*Column comparison*
+![column compare](https://raw.githubusercontent.com/vitrus/simple-mysql-compare/master/screenshots/column-compare.png)
+
 ### Why I wrote this tool
 
 I had two (large) databases for two different systems that were very alike but kind of grew apart. The structure of those two databases needed to be reconciled into one single database. Opening the databases in two separate phpMyAdmin (or other database GUI) and compare became quite of a headache and the database comparison tools I found on github where not very intuitive to use. So I wrote this tool in an hour and decided to pubish it so it might save someone else an hour. 
