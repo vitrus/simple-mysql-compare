@@ -7,8 +7,8 @@ It shows an overview of all the tables in the databases, whether they are presen
 ### Installation
 
 1. Download or checkout the sources 
-2. Supply your database information in config.php
-3. Point your browser towards the index.php
+2. Create a `config.php` (use config.php.dist as template)
+3. Point your browser towards the `index.php`
 
 ### Why I wrote this tool
 

@@ -8,15 +8,15 @@ require('config.php');
 // connect to both databases defined in $databases
 makeDatabaseConnections($databases);
 
-if(!empty($_GET['table'])){
+if (!empty($_GET['table'])) {
 
     // if a table is given, compare this table
-    tableCompareAction( $databases, $_GET['table'] );
+    tableCompareAction($databases, $_GET['table']);
 
 } else {
 
     // otherwise, compare the database as a whole
-    databaseCompareAction( $databases );
+    databaseCompareAction($databases);
 
 }
 
@@ -25,50 +25,68 @@ if(!empty($_GET['table'])){
  *
  * @param $databases
  */
-function makeDatabaseConnections(&$databases){
+function makeDatabaseConnections(&$databases)
+{
     // connect with both database
     foreach ($databases as $key => $db) {
-        $databases[$key]['connection'] = mysqli_connect(
-            $db['config']['host'],
+
+        // create the connection
+        $databases[$key]['connection'] = new PDO(
+            'mysql:host='.$db['config']['host'].';dbname='.$db['config']['name'].';charset=utf8',
             $db['config']['user'],
             $db['config']['password']
         );
 
-        mysqli_select_db($databases[$key]['connection'], $db['config']['name']);
+        // change connection properties
+        $databases[$key]['connection']->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $databases[$key]['connection']->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+        $databases[$key]['connection']->setAttribute(
+            PDO::ATTR_DEFAULT_FETCH_MODE,
+            PDO::FETCH_ASSOC
+        ); // default fetch mode: assoc
     }
 }
 
-function tableCompareAction(&$databases, $tableName){
+function tableCompareAction(&$databases, $tableName)
+{
 
-    $all_columns = array();
+    $all_columns = [];
 
-    foreach($databases as $key => $db){
-        $result = mysqli_query($db['connection'], "SHOW COLUMNS FROM `".$tableName."`");
-        while($row = mysqli_fetch_assoc($result)){
+    foreach ($databases as $key => $db) {
+
+        $stmt = $db['connection']->prepare(
+            "SHOW COLUMNS FROM `".$tableName."`"
+        ); // too bad a table name cannot be parameterized
+        $stmt->execute([]);
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($rows as $row) {
             // add this row to the list of all columns
             $all_columns[] = $row['Field'];
             $databases[$key]['columns'][$row['Field']] = $row;
         }
     }
 
-    $all_columns = array_unique( $all_columns );
+    $all_columns = array_unique($all_columns);
 
     include("table-overview.template.php");
 }
 
-function databaseCompareAction(&$databases){
+function databaseCompareAction(&$databases)
+{
 
     foreach ($databases as $key => $db) {
 
-        $result = mysqli_query($db['connection'], "SHOW TABLES");
-        while ($row = mysqli_fetch_row($result)) {
-            //echo debug($row, 'ROW');
-            $databases[$key]['tables'][] = $row[0];
+        $stmt = $db['connection']->query("SHOW TABLES");
+        $tables = $stmt->fetchAll(PDO::FETCH_NUM); // numeric, so every table is under (column index) 0
+        foreach ($tables as $table) {
+            $databases[$key]['tables'][] = $table[0];
         }
     }
 
+    // create one array with all the tablenames from both databases
     $all_tables = array_unique(array_merge($databases[0]['tables'], $databases[1]['tables']));
-    sort($all_tables);
+    sort($all_tables); // order them alphabetically
 
     include("database-overview.template.php");
 }
